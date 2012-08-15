@@ -13,6 +13,7 @@ if forceViewMode=="true":
 else:
   forceViewMode=False
 viewMode=str(settings.getSetting("viewMode"))
+autoPlay=int(settings.getSetting("autoPlay"))
 
 def index():
         addDir(translation(30003), "", "search", "")
@@ -194,7 +195,11 @@ def playVideo(id):
             url=urlTemp
         url=base+"/"+url+"?v=2.6.8&fp=&r=&g="
         listitem = xbmcgui.ListItem(path=url)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        if autoPlay>0:
+          xbmc.sleep(autoPlay*1000)
+          if xbmc.Player().isPlaying()==True and int(xbmc.Player().getTime())==0:
+            xbmc.Player().pause()
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
